@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <title>Editar Propriedade</title>
+    <style>
+        body {
+            padding-top: 70px;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .main-content {
+            flex-grow: 1;
+        }
+        fieldset legend {
+            margin-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body class="bg-body-tertiary">
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
+    <div class="container">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/dashboard" aria-current="page"> <i class="bi bi-house-door-fill me-1"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-people-fill me-1"></i>
+                        Usuários
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="/usuarios/cadastrar">
+                            <i class="bi bi-person-plus me-2"></i>
+                            Cadastrar Usuário
+                        </a></li>
+                        <li><a class="dropdown-item" href="/usuarios/listar"> <i class="bi bi-list-ul me-2"></i>
+                            Listar Usuários
+                        </a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-building-gear me-1"></i> Propriedades
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="/propriedade/cadastrar">
+                            <i class="bi bi-building-add me-2"></i>
+                            Cadastrar Propriedade
+                        </a></li>
+                        <li><a class="dropdown-item" href="/propriedade/listar">
+                            <i class="bi bi-buildings me-2"></i>
+                            Listar Propriedades
+                        </a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle me-1"></i>
+                        Perfil
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownUser">
+                        <li><a class="dropdown-item" th:href="@{/usuarios/meus-dados}">
+                            <i class="bi bi-person-lines-fill me-2"></i>
+                            Meus Dados
+                        </a></li>
+                        <li><hr class="dropdown-divider dropdown-divider-light"></li> <li><a class="dropdown-item text-danger" href="/logout">
+                        <i class="bi bi-box-arrow-right me-2"></i>
+                        Sair
+                    </a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container mt-4 main-content mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Editar Propriedade</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form id="editPropForm" class="needs-validation"
+                          th:if="${propriedade != null}"
+                          th:action="@{/propriedade/atualizar}"
+                          th:object="${propriedade}"
+                    method="post"
+                    novalidate>
+
+                    <div th:unless="${propriedade != null}" class="alert alert-danger" role="alert">
+                        Erro: Dados da propriedade não encontrados. Não é possível editar.
+                    </div>
+
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div class="mb-3">
+                        <label for="nome_entrevistado" class="form-label">Nome do Entrevistado:</label>
+                        <input type="text" class="form-control" id="nome_entrevistado" th:field="*{nome_entrevistado}" required>
+                        <div class="invalid-feedback">
+                            Por favor, informe o nome do entrevistado.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="localidade" class="form-label">Localidade:</label>
+                        <input type="text" class="form-control" id="localidade" th:field="*{localidade}" required>
+                        <div class="invalid-feedback">
+                            Por favor, informe a localidade.
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="telefone" class="form-label">Telefone:</label>
+                        <input type="tel" class="form-control" id="telefone" placeholder="(xx) xxxxx-xxxx" th:field="*{telefone}" required>
+                        <div class="invalid-feedback">
+                            Formato de telefone inválido. Use (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="distancia_municipio" class="form-label">Distância até o município (km):</label>
+                            <input type="number" class="form-control" step="0.01" min="0" id="distancia_municipio" th:field="*{distancia_municipio}" required>
+                            <div class="invalid-feedback">
+                                A distância é obrigatória e não pode ser negativa.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="coordenadas" class="form-label">Coordenadas (latitude,longitude):</label>
+                            <input type="text" class="form-control" id="coordenadas" placeholder="Ex: -29.1234,-53.1234" th:field="*{coordenadas}" required>
+                            <div class="invalid-feedback">
+                                As coordenadas são obrigatórias. Ex: -29.1234,-53.1234
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cidade" class="form-label">Cidade:</label>
+                            <select class="form-select" id="cidade" th:field="*{cidade.id}" required>
+                                <option value="">Selecione uma cidade</option>
+                                <option th:if="${todasAsCidades != null}"
+                                        th:each="cidadeOpt : ${todasAsCidades}"
+                                        th:value="${cidadeOpt.id}"
+                                        th:text="${cidadeOpt.nome}"
+                                        th:selected="${propriedade.cidade != null && cidadeOpt.id == propriedade.cidade.id}">
+                                </option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Por favor, selecione uma cidade.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="renda_fruticultura" class="form-label">Renda com fruticultura (%):</label>
+                            <input type="number" class="form-control" id="renda_fruticultura" step="0.01" min="0" max="100" th:field="*{renda_fruticultura}" required >
+                            <div class="invalid-feedback">
+                                A renda é obrigatória (0-100%).
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="data_coleta" class="form-label">Data da coleta:</label>
+                            <input type="date"
+                                   class="form-control"
+                                   id="data_coleta"
+                                   th:field="*{data_coleta}"
+                                   th:value="${#temporals.format(propriedade.data_coleta, 'yyyy-MM-dd')}"
+                                   required>
+                            <div class="invalid-feedback">
+                                A data da coleta é obrigatória.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="numMaoObraFamiliar" class="form-label">Nº de pessoas - mão de obra familiar:</label>
+                            <input type="number" class="form-control" id="numMaoObraFamiliar" min="0" th:field="*{numPessoasMaoObraFamiliar}" required>
+                            <div class="invalid-feedback">
+                                Número obrigatório e não pode ser negativo.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="numContratadas" class="form-label">Nº de pessoas contratadas:</label>
+                            <input type="number" class="form-control" id="numContratadas" min="0" th:field="*{numPessoasContratadas}" required>
+                            <div class="invalid-feedback">
+                                Número obrigatório e não pode ser negativo.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="mediaDiarias" class="form-label">Média de diárias pagas por ano:</label>
+                            <input type="number" class="form-control" id="mediaDiarias" min="0" th:field="*{mediaDiariasPagasAno}" required>
+                            <div class="invalid-feedback">
+                                Média obrigatória e não pode ser negativa.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="sistema_cultivo" class="form-label">Sistema de cultivo:</label>
+                            <select class="form-select" id="sistema_cultivo" th:field="*{sistema_cultivo}" required>
+                                <option value="">Selecione...</option>
+                                <option value="CONVENCIONAL">Convencional</option>
+                                <option value="ORGANICO">Orgânico</option>
+                                <option value="AGROECOLOGICO">Agroecológico</option>
+                                <option value="SISTEMAS_INTEGRADOS">Sistemas integrados</option>
+                            </select>
+                            <div class="invalid-feedback">Selecione o sistema de cultivo.</div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="manejo_solo_adubacao" class="form-label">Manejo do solo e adubação:</label>
+                            <select class="form-select" id="manejo_solo_adubacao" th:field="*{manejo_solo_adubacao}" required>
+                                <option value="">Selecione...</option>
+                                <option value="ORGANICO">Orgânico</option>
+                                <option value="MINERAIS">Minerais</option>
+                                <option value="AMBOS">Ambos</option>
+                            </select>
+                            <div class="invalid-feedback">Selecione o manejo do solo.</div>
+                        </div>
+                    </div>
+
+                    <fieldset class="mb-3 border p-3 rounded">
+                        <legend class="w-auto px-2 h6">Tipo de Controle Fitossanitário Utilizado:</legend>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="controleQuimico" th:field="*{manejo_fitossanitario_quimico}">
+                            <label class="form-check-label" for="controleQuimico">
+                                Utiliza controle químico
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="controleBiologico" th:field="*{manejo_fitossanitario_biologico}">
+                            <label class="form-check-label" for="controleBiologico">
+                                Utiliza controle biológico
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="controleCultural" th:field="*{manejo_fitossanitario_cultural}">
+                            <label class="form-check-label" for="controleCultural">
+                                Utiliza controle cultural
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="mb-4 border p-3 rounded">
+                        <legend class="w-auto px-2 h6">Infraestrutura e Tecnologia:</legend>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="irrigacao" th:field="*{irrigacao}">
+                                    <label class="form-check-label" for="irrigacao">Irrigação</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="assistencia_tecnica" th:field="*{assistencia_tecnica}">
+                                    <label class="form-check-label" for="assistencia_tecnica">Assistência técnica</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="camera_fria" th:field="*{camera_fria}">
+                                    <label class="form-check-label" for="camera_fria">Câmara fria</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="galpao_beneficiamento" th:field="*{galpao_beneficiamento}">
+                                    <label class="form-check-label" for="galpao_beneficiamento">Galpão beneficiamento</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="maquina_colheita" th:field="*{maquina_colheita}">
+                                    <label class="form-check-label" for="maquina_colheita">Máquina de colheita</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="estufas" th:field="*{estufas}">
+                                    <label class="form-check-label" for="estufas">Estufas</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="trator" th:field="*{trator}">
+                                    <label class="form-check-label" for="trator">Trator</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="pulverizador_costal" th:field="*{pulverizador_costal}">
+                                    <label class="form-check-label" for="pulverizador_costal">Pulverizador costal</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="tesoura_eletrica_poda" th:field="*{tesoura_eletrica_poda}">
+                                    <label class="form-check-label" for="tesoura_eletrica_poda">Tesoura elétrica para poda</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="micro_trator" th:field="*{micro_trator}">
+                                    <label class="form-check-label" for="micro_trator">Micro trator</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="pulverizador_motorizado" th:field="*{pulverizador_motorizado}">
+                                    <label class="form-check-label" for="pulverizador_motorizado">Pulverizador motorizado</label>
+                                </div>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="turbo_atomizador_motorizado" th:field="*{turbo_atomizador_motorizado}">
+                                    <label class="form-check-label" for="turbo_atomizador_motorizado">Turbo atomizador motorizado</label>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" id="veiculo_motorizado_transporte" th:field="*{veiculo_motorizado_transporte}">
+                                    <label class="form-check-label" for="veiculo_motorizado_transporte">Veículo motorizado para transporte</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="d-grid gap-2 mt-4 d-md-flex justify-content-md-end">
+                        <a href="/propriedade/listar" class="btn btn-outline-secondary me-md-2">
+                            <i class="bi bi-x-circle me-1"></i>Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle-fill me-2"></i>Salvar Alterações
+                        </button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="container-fluid bg-dark text-white-50 mt-auto py-3">
+    <div class="container text-center">
+
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/css/validate.js}"></script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Propriedade</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <style>
+        fieldset legend {
+            margin-bottom: 0.75rem;
+        }
+
+    </style>
+</head>
+
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm">
+    <div class="container">
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/dashboard" aria-current="page"> <i class="bi bi-house-door-fill me-1"></i> Home
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-people-fill me-1"></i>
+                        Usuários
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="/usuarios/cadastrar">
+                            <i class="bi bi-person-plus me-2"></i>
+                            Cadastrar Usuário
+                        </a></li>
+                        <li><a class="dropdown-item" href="/usuarios/listar"> <i class="bi bi-list-ul me-2"></i>
+                            Listar Usuários
+                        </a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-building-gear me-1"></i> Propriedades
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li><a class="dropdown-item" href="/propriedade/cadastrar">
+                            <i class="bi bi-building-add me-2"></i>
+                            Cadastrar Propriedade
+                        </a></li>
+                        <li><a class="dropdown-item" href="/propriedade/listar">
+                            <i class="bi bi-buildings me-2"></i>
+                            Listar Propriedades
+                        </a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle me-1"></i>
+                        Perfil
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdownUser">
+                        <li><a class="dropdown-item" th:href="@{/usuarios/meus-dados}">
+                            <i class="bi bi-person-lines-fill me-2"></i>
+                            Meus Dados
+                        </a></li>
+                        <li><hr class="dropdown-divider dropdown-divider-light"></li> <li><a class="dropdown-item text-danger" href="/logout">
+                        <i class="bi bi-box-arrow-right me-2"></i>
+                        Sair
+                    </a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container" style="margin-top: 80px; padding-bottom: 40px;">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h4 class="mb-0"><i class="bi bi-file-earmark-text me-2"></i>Cadastro de Propriedade</h4>
+                </div>
+
+                <div class="card-body p-4">
+                    <form id="cadastroPropForm" class="needs-validation" th:action="@{/propriedade/criarPropriedade}" method="post" novalidate>
+
+                        <div class="mb-3">
+                            <label for="nome_entrevistado" class="form-label">Nome do Entrevistado:</label>
+                            <input type="text" class="form-control" id="nome_entrevistado" name="nome_entrevistado" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="localidade" class="form-label">Localidade:</label>
+                            <input type="text" class="form-control" id="localidade" name="localidade" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="telefone" class="form-label">Telefone:</label>
+                            <input type="tel" class="form-control" id="telefone" name="telefone" placeholder="(xx) xxxxx-xxxx" required>
+                            <div class="invalid-feedback">
+                                Formato de telefone inválido. Use (XX) XXXXX-XXXX ou (XX) XXXX-XXXX.
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="distancia_municipio" class="form-label">Distância até o município (km):</label>
+                                <input type="number" class="form-control" step="0.01" min="0" name="distancia_municipio" id="distancia_municipio" required>
+                                <div class="invalid-feedback">
+                                    A distância é obrigatória e não pode ser negativa.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="coordenadas" class="form-label">Coordenadas (latitude,longitude):</label>
+                                <input type="text" class="form-control" name="coordenadas" id="coordenadas" placeholder="Ex: -29.1234,-53.1234" required>
+                                <div class="invalid-feedback">
+                                    As coordenadas são obrigatórias. Ex: -29.1234,-53.1234
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cidade" class="form-label">Cidade:</label>
+                                <select class="form-select" id="cidade" name="cidade.id" required>
+                                    <option value="">Selecione uma cidade</option>
+                                    <option th:each="cidade : ${cidades}"
+                                            th:value="${cidade.id}"
+                                            th:text="${cidade.nome}">
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="renda_fruticultura" class="form-label">Renda com fruticultura (%):</label>
+                                <input type="number" class="form-control" id="renda_fruticultura" name="renda_fruticultura" step="0.01" min="0" max="100" required >
+                                <div class="invalid-feedback">
+                                    obrigatória e não pode ser negativa.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="data_coleta" class="form-label">Data da coleta:</label>
+                                <input type="date" class="form-control" id="data_coleta" name="data_coleta" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="numMaoObraFamiliar" class="form-label">Nº de pessoas - mão de obra familiar:</label>
+                                <input type="number" class="form-control" id="numMaoObraFamiliar" name="numPessoasMaoObraFamiliar" min="0" required>
+                                <div class="invalid-feedback">
+                                    Número de pessoas da família envolvida na mão de obra é obrigatório e não pode ser negativo.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="numContratadas" class="form-label">Nº de pessoas contratadas:</label>
+                                <input type="number" class="form-control" id="numContratadas" name="numPessoasContratadas" min="0" required>
+                                <div class="invalid-feedback">
+                                Número contratados é obrigatório e não pode ser negativo.
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="mediaDiarias" class="form-label">Média de diárias pagas por ano:</label>
+                                <input type="number" class="form-control" id="mediaDiarias" name="mediaDiariasPagasAno" min="0" required>
+                                <div class="invalid-feedback">
+                                Número médio de diárias pagas é obrigatório e não pode ser negativo.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="sistema_cultivo" class="form-label">Sistema de cultivo:</label>
+                                <select class="form-select" id="sistema_cultivo" name="sistema_cultivo" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="CONVENCIONAL">Convencional</option>
+                                    <option value="ORGANICO">Orgânico</option>
+                                    <option value="AGROECOLOGICO">Agroecológico</option>
+                                    <option value="SISTEMAS_INTEGRADOS">Sistemas integrados</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="manejo_solo_adubacao" class="form-label">Manejo do solo e adubação:</label>
+                                <select class="form-select" id="manejo_solo_adubacao" name="manejo_solo_adubacao" required>
+                                    <option value="">Selecione...</option>
+                                    <option value="ORGANICO">Orgânico</option>
+                                    <option value="MINERAIS">Minerais</option>
+                                    <option value="AMBOS">Ambos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <fieldset class="mb-3 border p-3 rounded">
+                            <legend class="w-auto px-2 h6">Tipo de Controle Fitossanitário Utilizado:</legend>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="manejo_fitossanitario_quimico" value="true" id="controleQuimico">
+                                <label class="form-check-label" for="controleQuimico">
+                                    Utiliza controle químico
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="manejo_fitossanitario_biologico" value="true" id="controleBiologico">
+                                <label class="form-check-label" for="controleBiologico">
+                                    Utiliza controle biológico
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="manejo_fitossanitario_cultural" value="true" id="controleCultural">
+                                <label class="form-check-label" for="controleCultural">
+                                    Utiliza controle cultural
+                                </label>
+                            </div>
+                        </fieldset>
+
+                        <fieldset class="mb-4 border p-3 rounded">
+                            <legend class="w-auto px-2 h6">Infraestrutura e Tecnologias:</legend>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="irrigacao" id="irrigacao">
+                                        <label class="form-check-label" for="irrigacao">Irrigação</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="assistencia_tecnica" id="assistencia_tecnica">
+                                        <label class="form-check-label" for="assistencia_tecnica">Assistência técnica</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="camera_fria" id="camera_fria">
+                                        <label class="form-check-label" for="camera_fria">Câmara fria</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="galpao_beneficiamento" id="galpao_beneficiamento">
+                                        <label class="form-check-label" for="galpao_beneficiamento">Galpão beneficiamento</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="maquina_colheita" id="maquina_colheita">
+                                        <label class="form-check-label" for="maquina_colheita">Máquina de colheita</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="estufas" id="estufas">
+                                        <label class="form-check-label" for="estufas">Estufas</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="trator" id="trator">
+                                        <label class="form-check-label" for="trator">Trator</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="pulverizador_costal" id="pulverizador_costal">
+                                        <label class="form-check-label" for="pulverizador_costal">Pulverizador costal</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="tesoura_eletrica_poda" id="tesoura_eletrica_poda">
+                                        <label class="form-check-label" for="tesoura_eletrica_poda">Tesoura elétrica para poda</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="micro_trator" id="micro_trator">
+                                        <label class="form-check-label" for="micro_trator">Micro trator</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="pulverizador_motorizado" id="pulverizador_motorizado">
+                                        <label class="form-check-label" for="pulverizador_motorizado">Pulverizador motorizado</label>
+                                    </div>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="turbo_atomizador_motorizado" id="turbo_atomizador_motorizado">
+                                        <label class="form-check-label" for="turbo_atomizador_motorizado">Turbo atomizador motorizado</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" name="veiculo_motorizado_transporte" id="veiculo_motorizado_transporte">
+                                        <label class="form-check-label" for="veiculo_motorizado_transporte">Veículo motorizado para transporte</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-save me-2"></i>Cadastrar Propriedade
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script th:src="@{/css/validate.js}"></script>
+</body>
+</html>

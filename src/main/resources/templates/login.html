@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>LOGIN</h1>
+        <!-- Adicione sua logo aqui -->
+
+    <div class="error-message" th:if="${param.erro}">
+        Credenciais inválidas! Usuário não encontrado.
+    </div>
+
+    <form id="loginForm" th:action="@{/login}" method="post">
+        <div class="form-group">
+            <label for="email">E-mail:</label>
+            <input type="text" id="email" name="email" required placeholder="Digite seu e-mail">
+        </div>
+
+        <div class="form-group">
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha" name="senha" required placeholder="Digite sua senha">
+        </div>
+
+        <button type="submit">Entrar</button>
+    </form>
+
+
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+        const username = document.getElementById('email').value;
+        const password = document.getElementById('senha').value;
+
+        if (!username || !password) {
+            e.preventDefault();
+            document.getElementById('errorMessage').style.display = 'block';
+        }
+    });
+</script>
+</div>
+</body>
+</html>
